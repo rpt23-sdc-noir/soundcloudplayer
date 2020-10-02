@@ -1,5 +1,5 @@
 {
-  "name": "Frankie",
+  "name": "frankie",
   "version": "",
   "description": "",
   "author": "",
@@ -31,6 +31,7 @@
     "chai": "^4.2.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "mocha": "^8.1.3",
+    "supertest": "^5.0.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   }

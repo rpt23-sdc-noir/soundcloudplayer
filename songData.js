@@ -29,7 +29,7 @@ var saveSong = async (songData, callback) => {
       return('Song saved');
     })
   } catch(error) {
-    return('Error in saving song to DB')
+    console.error(error);
   }
 };
 
@@ -38,7 +38,7 @@ var deleteSongs = async () => {
     var deleted = await Song.deleteMany({ });
     return (deleted);
   } catch(error) {
-    return('Error in deleting songs in DB')
+    console.error(error);
   }
 };
 
@@ -47,7 +47,7 @@ var findSong = async (id) => {
     var found = await Song.findOne({ songID: id })
     return found;
   } catch(error) {
-    return(`Error in retireving ${id}'s song data from DB`);
+    console.error(error);
   }
 }
 

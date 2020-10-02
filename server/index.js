@@ -11,9 +11,9 @@ app.use(bodyParser.json())
 
 // INCLUDE "try" AND "catch" IN THE ASYNC AWAIT BELOW
 
-app.get('/songdata', async (req, res) => {
+app.get('/songdata/:id', async (req, res) => {
   try {
-    var id = req.body.id;
+    var id = req.params.id;
     if (id > 100 || id < 0) {
       res.end('SONG DOES NOT EXIST');
     } else {
