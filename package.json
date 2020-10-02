@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "Frankie",
   "version": "",
   "description": "",
   "author": "",
@@ -8,14 +8,30 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "seed": "nodemon ./seedingScript.js"
+    "seed": "node ./seedingScript.js",
+    "start": "nodemon ./server/index.js",
+    "build": "webpack --mode=development -d --watch",
+    "test": "mocha"
   },
   "dependencies": {
+    "@babel/preset-react": "^7.10.4",
+    "body-parser": "^1.19.0",
+    "chai-http": "^4.3.0",
+    "express": "^4.17.1",
     "mongoose": "^5.10.7",
     "node": "^14.11.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "path": "^0.12.7",
+    "react": "^16.13.1"
   },
   "devDependencies": {
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor"
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "chai": "^4.2.0",
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
+    "mocha": "^8.1.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   }
 }

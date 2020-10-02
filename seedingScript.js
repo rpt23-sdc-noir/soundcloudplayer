@@ -155,10 +155,14 @@ var seederboi = () => {
       if (err) {
         console.log(`Error in saving ${dataToSave.songName} to DB`);
       } else {
-        console.log(result);
+        console.log('Seeded');
       }
     })
   }
 }
 
 seederboi();
+
+module.exports = {
+  seederboi
+};
