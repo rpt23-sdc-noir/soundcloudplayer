@@ -16,5 +16,5 @@ class Player extends React.component {
 
 ReactDom.render(
   <Player />,
-  document.getElementById('Frankie_Player')
+  document.getElementById('frankie-player')
 );

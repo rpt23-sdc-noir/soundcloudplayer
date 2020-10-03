@@ -54,7 +54,7 @@ describe('GET /songdata/:id', () => {
 describe(`Should only get data for valid id's`, () => {
   it('Should respond with a 400 if incorrect song id', (done) => {
     request(app)
-    .get('/songdata/' + 0)
+    .get('/songdata/0')
     .expect(404)
     .end((err, res) => {
       if(err) {
