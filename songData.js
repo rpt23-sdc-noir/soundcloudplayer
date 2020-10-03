@@ -22,31 +22,47 @@ const songDataSchema = new mongoose.Schema({
 
 const Song = mongoose.model('Song', songDataSchema);
 
-var saveSong = (songData, callback) => {
-  let song = new Song(songData);
-  song.save((err, data) => {
-    if (err) {
-      console.log('Error in saving song to db');
-      callback(err);
-    } else {
-      console.log(`Song, "${song.songName}" saved to DB`);
-      callback(null, data);
-    }
-  })
+var saveSong = async (songData, callback) => {
+  try {
+    let song = new Song(songData);
+    var saved = await song.save(( ) => {
+      return('Song saved');
+    })
+  } catch(error) {
+    console.error(error);
+  }
 };
 
-var deleteSongs = (callback) => {
-  Song.deleteMany({ }, (err, song) => {
-    if (err) {
-      console.log(`Error in deleting songs in DB!`);
-      callback(err);
-    } else {
-      callback(null, 'Songs deleted from DB');
-    }
-  })
+var deleteSongs = async () => {
+  try {
+    var deleted = await Song.deleteMany({ });
+    return (deleted);
+  } catch(error) {
+    console.error(error);
+  }
 };
+
+var findSong = async (id) => {
+  try {
+    var found = await Song.findOne({ songID: id })
+    return found;
+  } catch(error) {
+    console.error(error);
+  }
+}
+
+var countSongs = async () => {
+  try {
+    var counted = await Song.countDocuments({ });
+    return counted;
+  } catch(error) {
+    return('Error in counting songs in DB');
+  }
+}
 
 module.exports = {
   saveSong,
-  deleteSongs
+  deleteSongs,
+  findSong,
+  countSongs
 }

@@ -1,6 +1,6 @@
 const songData = require('./songData.js');
 
-var seederboi = () => {
+var seederboi = async () => {
   // almost every Iron Maiden track name to randomly choose from
   var names = ['2 A.m.',
     '2 Minutes To Midnight',
@@ -134,13 +134,7 @@ var seederboi = () => {
     'Wildest Dreams',
     'Women In Uniform',
     'Wrathchild']
-  songData.deleteSongs((err, result) => {
-    if (err) {
-      console.log('Error is requesting the DB to clear itself');
-    } else {
-      console.log(result);
-    }
-  })
+  var deleted = await songData.deleteSongs();
 
   // Average Song length on SoundCloud is 3-5 minutes
   var min = Math.ceil(180); // 3 minutes converted to seconds
@@ -151,14 +145,12 @@ var seederboi = () => {
     dataToSave.songLength = Math.floor(Math.random() * (max - min) + min);
     dataToSave.songName = names[Math.floor(Math.random() * ((names.length - 1)))];
     dataToSave.songURL = 'https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3'
-    songData.saveSong(dataToSave, (err, result) => {
-      if (err) {
-        console.log(`Error in saving ${dataToSave.songName} to DB`);
-      } else {
-        console.log(result);
-      }
-    })
+  var saved = await songData.saveSong(dataToSave);
   }
 }
 
 seederboi();
+
+module.exports = {
+  seederboi
+};
