@@ -1,13 +1,9 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var songData = require('../songData');
-var path = require('path');
 var app = express();
-var port = 3000;
+var port = 1000;
 
-app.use(express.static(path.join(__dirname + '../client')));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.static('client'));
 
 // INCLUDE "try" AND "catch" IN THE ASYNC AWAIT BELOW
 
@@ -23,7 +19,6 @@ app.get('/songdata/:id', async (req, res) => {
   } catch (error) {
     console.log(error)
   }
-
 });
 
 app.listen(port, () => {

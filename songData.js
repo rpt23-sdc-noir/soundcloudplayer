@@ -17,7 +17,8 @@ const songDataSchema = new mongoose.Schema({
   songName: String,
   songLength: Number,
   songID: Number,
-  songURL: String
+  songURL: String,
+  songImage: String
 });
 
 const Song = mongoose.model('Song', songDataSchema);
