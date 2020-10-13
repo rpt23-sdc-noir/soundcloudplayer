@@ -1,4 +1,7 @@
 const songData = require('./songData.js');
+var key = require('./unsplashAccess.js');
+var axios = require('axios');
+
 
 var seederboi = async () => {
   // almost every Iron Maiden track name to randomly choose from
@@ -134,6 +137,35 @@ var seederboi = async () => {
     'Wildest Dreams',
     'Women In Uniform',
     'Wrathchild']
+
+  // var photosJSON;
+
+  // axios.get(`https://api.unsplash.com/search/photos/?query=music&client_id=${key.api_key}`)
+  // .then((res) => {
+  //   console.log('Recieved photos yo');
+  //   photosJSON = res.data.results;
+  // }).catch((err) => {
+  //   console.log('Error in retrieving photos yo');
+  //   console.log(err);
+  // })
+
+  // console.log(photosJSON.length);
+
+  var gotPhotos = await axios.get(`https://api.unsplash.com/search/photos/?query=music&client_id=${key.api_key}`)
+  .then((res) => {
+    return res.data.results
+  }).catch((err) => {
+    console.log('Error in retrieving photos yo');
+    console.log(err);
+  })
+
+
+  var photos = gotPhotos.map(photo => {
+    return photo.urls.raw
+  })
+
+  console.log(photos)
+
   var deleted = await songData.deleteSongs();
 
   // Average Song length on SoundCloud is 3-5 minutes
@@ -141,11 +173,12 @@ var seederboi = async () => {
   var max = Math.floor(300); // 5 minutes
   for (var i = 1; i <= 100; i++) {
     var id = i;
-    var dataToSave = {songID: id};
+    var dataToSave = { songID: id };
     dataToSave.songLength = Math.floor(Math.random() * (max - min) + min);
     dataToSave.songName = names[Math.floor(Math.random() * ((names.length - 1)))];
     dataToSave.songURL = 'https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3'
-  var saved = await songData.saveSong(dataToSave);
+    dataToSave.songImage = photos[Math.floor(Math.random() * ((photos.length - 1)))];
+    var saved = await songData.saveSong(dataToSave);
   }
 }
 
