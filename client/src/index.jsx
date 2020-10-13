@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Howl, Howler} from 'howler';
+import { Howl, Howler } from 'howler';
 import $ from 'jquery';
 
 class Player extends React.Component {
@@ -8,30 +8,36 @@ class Player extends React.Component {
     super(props);
     this.state = {
       playing: false,
-      currentSong: 'https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3',
+      currentSong: '',
       currentPicture: '',
       currentSongName: '',
       currentHashtags: ''
     }
     // this.url = "https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3";
-    this.audio = new Howl({
-      src: [this.state.currentSong]
-    })
+
+
   }
 
   initialize() {
     $.ajax({
-      type:"GET",
-      url: 'https://localhost:1000/songdata/1',
+      type: "GET",
+      url: 'http://localhost:1000/songdata/1',
       success: (res) => {
-        console.log(res);
+        this.setState({
+          currentSong: res.songURL,
+          currentPicture: res.songImage,
+          currentSongName: res.songName
+         })
+        this.audio = new Howl({
+          src: [this.state.currentSong]
+        })
+        console.log(this.state);
       }
     })
   }
 
   componentDidMount() {
     this.initialize();
-    console.log('initialized');
   }
 
   // componentWillUnmount() {
@@ -42,13 +48,12 @@ class Player extends React.Component {
     this.setState({ playing: !this.state.playing }, () => {
       this.state.playing ? this.audio.play() : this.audio.pause();
     });
-    // audio.play()
   }
 
-  render () {
+  render() {
     return (
       <div className="frankie-top-player">
-        <button className="frankie-top-player-button" onClick={() => {this.togglePlay()}}>{this.state.playing ? 'Pause' : 'Play'}</button>
+        <button className="frankie-top-player-button" onClick={() => { this.togglePlay() }}>{this.state.playing ? 'Pause' : 'Play'}</button>
       </div>
     );
   }

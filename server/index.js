@@ -1,9 +1,11 @@
 var express = require('express');
 var songData = require('../songData');
 var app = express();
+var cors = require('cors');
 var port = 1000;
 
 app.use(express.static('client'));
+app.use(cors());
 
 // INCLUDE "try" AND "catch" IN THE ASYNC AWAIT BELOW
 
