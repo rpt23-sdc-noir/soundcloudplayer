@@ -23,6 +23,20 @@ app.get('/songdata/:id', async (req, res) => {
   }
 });
 
+app.get('/songsByBandID/:id', async (req, res) => {
+  try {
+    var bandID = req.params.id;
+    if (bandID > 30 || bandID < 0) {
+      res.end('BAND ID DOES NOT EXIST');
+    } else {
+      var findSongsByBand = await songData.findSongsByBand(bandID)
+      res.send(findSongsByBand);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+})
+
 app.listen(port, () => {
   console.log('Server is listening at http://localhost:' + port)
 });

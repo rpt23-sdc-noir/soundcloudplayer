@@ -51,10 +51,36 @@ describe('GET /songdata/:id', () => {
   })
 });
 
+describe('GET /songsByBandID/:id', () => {
+  it('Should respond with a JSON object with atleast one song with bandID', (done) => {
+    request(app)
+      .get('/songsByBandID/' + 3)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', "text/html; charset=utf-8")
+      .expect(200)
+    done();
+  })
+});
+
 describe(`Should only get data for valid id's`, () => {
   it('Should respond with a 400 if incorrect song id', (done) => {
     request(app)
     .get('/songdata/0')
+    .expect(404)
+    .end((err, res) => {
+      if(err) {
+        done(err)
+      } else {
+        done();
+      }
+    })
+  })
+})
+
+describe(`Should only get data for valid band id's`, () => {
+  it('Should respond with a 400 if incorrect song id', (done) => {
+    request(app)
+    .get('/songsByBandID/0')
     .expect(404)
     .end((err, res) => {
       if(err) {

@@ -18,7 +18,8 @@ const songDataSchema = new mongoose.Schema({
   songLength: Number,
   songID: Number,
   songURL: String,
-  songImage: String
+  songImage: String,
+  bandID: Number
 });
 
 const Song = mongoose.model('Song', songDataSchema);
@@ -47,7 +48,7 @@ var findSong = async (id) => {
   try {
     var found = await Song.findOne({ songID: id })
     return found;
-  } catch(error) {
+  } catch (error) {
     console.error(error);
   }
 }
@@ -61,9 +62,19 @@ var countSongs = async () => {
   }
 }
 
+var findSongsByBand = async (id) => {
+  try {
+    var found = await Song.find({ 'bandID': id});
+    return found;
+  } catch(error) {
+    return(`Error in finding songs associated by bandID ${id}`)
+  }
+}
+
 module.exports = {
   saveSong,
   deleteSongs,
   findSong,
-  countSongs
+  countSongs,
+  findSongsByBand
 }

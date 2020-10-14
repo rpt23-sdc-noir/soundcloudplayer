@@ -138,18 +138,6 @@ var seederboi = async () => {
     'Women In Uniform',
     'Wrathchild']
 
-  // var photosJSON;
-
-  // axios.get(`https://api.unsplash.com/search/photos/?query=music&client_id=${key.api_key}`)
-  // .then((res) => {
-  //   console.log('Recieved photos yo');
-  //   photosJSON = res.data.results;
-  // }).catch((err) => {
-  //   console.log('Error in retrieving photos yo');
-  //   console.log(err);
-  // })
-
-  // console.log(photosJSON.length);
 
   var gotPhotos = await axios.get(`https://api.unsplash.com/search/photos/?query=music&client_id=${key.api_key}`)
   .then((res) => {
@@ -164,7 +152,6 @@ var seederboi = async () => {
     return photo.urls.raw
   })
 
-  console.log(photos)
 
   var deleted = await songData.deleteSongs();
 
@@ -178,6 +165,7 @@ var seederboi = async () => {
     dataToSave.songName = names[Math.floor(Math.random() * ((names.length - 1)))];
     dataToSave.songURL = 'https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3'
     dataToSave.songImage = photos[Math.floor(Math.random() * ((photos.length - 1)))];
+    dataToSave.bandID = Math.floor(Math.random() * (30 - 1) + 1);
     var saved = await songData.saveSong(dataToSave);
   }
 }

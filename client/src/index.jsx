@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Howl, Howler } from 'howler';
 import $ from 'jquery';
+import '../clientstyles.css'
 
 class Player extends React.Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class Player extends React.Component {
       currentSong: '',
       currentPicture: '',
       currentSongName: '',
-      currentHashtags: ''
+      currentHashtags: '',
+      currentBandID: ''
     }
     // this.url = "https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3";
 
