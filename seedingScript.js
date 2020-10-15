@@ -165,7 +165,7 @@ var seederboi = async () => {
     dataToSave.songName = names[Math.floor(Math.random() * ((names.length - 1)))];
     dataToSave.songURL = 'https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3'
     dataToSave.songImage = photos[Math.floor(Math.random() * ((photos.length - 1)))];
-    dataToSave.bandID = Math.floor(Math.random() * (30 - 1) + 1);
+    // dataToSave.bandID = Math.floor(Math.random() * (30 - 1) + 1);
     var saved = await songData.saveSong(dataToSave);
   }
 }
