@@ -1,5 +1,6 @@
 var express = require('express');
 var songData = require('../songData');
+var path = require('path');
 var app = express();
 var cors = require('cors');
 var port = 1000;
@@ -35,6 +36,10 @@ app.get('/songsByBandID/:id', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+})
+
+app.get('/:current', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
 })
 
 app.listen(port, () => {
