@@ -11,6 +11,7 @@
     "seed": "node ./seedingScript.js",
     "start": "nodemon ./server/index.js",
     "build": "webpack --mode=development -d --watch",
+    "Pbuild": "webpack --mode=production -d --watch",
     "test": "mocha",
     "jest": "jest"
   },
