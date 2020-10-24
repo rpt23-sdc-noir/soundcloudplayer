@@ -3,7 +3,7 @@ var songData = require('../songData');
 var path = require('path');
 var app = express();
 var cors = require('cors');
-var port = 6000;
+var port = 1000;
 
 app.use(express.static('client'));
 app.use(cors());
