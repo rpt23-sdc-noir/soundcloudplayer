@@ -4,7 +4,7 @@ var axios = require('axios');
 
 
 var seederboi = async () => {
-  // almost every Iron Maiden track name to randomly choose from
+  // almost every Iron Maiden track name to randomly choose from ?query=music&client_id=
   var names = ['2 A.m.',
     '2 Minutes To Midnight',
     '22 Acacia Avenue',
@@ -139,7 +139,8 @@ var seederboi = async () => {
     'Wrathchild']
 
 
-  var gotPhotos = await axios.get(`https://api.unsplash.com/search/photos/?query=music&client_id=${key.api_key}`)
+  var gotPhotos = await axios.get(`https://api.unsplash.com/search/photos/`,
+  {params: {query : 'music', client_id : key.api_key}})
   .then((res) => {
     return res.data.results
   }).catch((err) => {
