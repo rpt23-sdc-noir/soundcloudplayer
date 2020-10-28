@@ -36,7 +36,7 @@ class Player extends React.Component {
   initialize() {
     $.ajax({
       type: "GET",
-      url: `http://localhost:3005/songdata/${this.songId}`,
+      url: `http://52.37.102.63:3005/songdata/${this.songId}`,
       success: (res) => {
         this.setState({
           currentSong: this.audio = new Howl({
@@ -50,7 +50,7 @@ class Player extends React.Component {
     })
     $.ajax({
       type: "GET",
-      url: `http://localhost:4001/hashtags/${this.songId}`,
+      url: `http://18.189.26.97:4001/hashtags/${this.songId}`,
       success: (res) => {
         var hashtags = res.data;
         this.state.currentHashtags = hashtags;
@@ -61,7 +61,7 @@ class Player extends React.Component {
     })
     $.ajax({
       type: "GET",
-      url: `http://localhost:2000/artistBio/${this.songId}`,
+      url: `http://34.220.154.45:2000/artistBio/${this.songId}`,
       success: (res) => {
         this.setState({
           currentBandID: res.data.bandId,
