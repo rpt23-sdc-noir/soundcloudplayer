@@ -21,27 +21,27 @@ class Player extends React.Component {
     this.songId = window.location.pathname.substring(1);
   }
 
-  frame() {
-    var song = this.audio
-    console.log(song);
-    var seek = song.seek() || 0;
-    var progressBar = document.getElementById('progress-bar');
-    progressBar.style.width = (((seek / song.duration()) * 100) || 0) + '%';
-    if (song.playing()) {
-      requestAnimationFrame(this.frame);
-    }
+  // frame() {
+  //   var song = this.audio
+  //   console.log(song);
+  //   var seek = song.seek() || 0;
+  //   var progressBar = document.getElementById('progress-bar');
+  //   progressBar.style.width = (((seek / song.duration()) * 100) || 0) + '%';
+  //   if (song.playing()) {
+  //     requestAnimationFrame(this.frame);
+  //   }
 
-  }
+  // }
 
   initialize() {
     $.ajax({
       type: "GET",
-      url: `http://localhost:1000/songdata/${this.songId}`,
+      url: `http://localhost:3005/songdata/${this.songId}`,
       success: (res) => {
         this.setState({
           currentSong: this.audio = new Howl({
             src: [res.songURL],
-            onplay: () => { requestAnimationFrame(this.frame) }
+            // onplay: () => { requestAnimationFrame(this.frame) }
           }),
           currentPicture: res.songImage,
           currentSongName: res.songName
@@ -73,6 +73,7 @@ class Player extends React.Component {
 
   componentDidMount() {
     this.initialize();
+    console.log(this.state);
   }
 
   // componentWillUnmount() {
