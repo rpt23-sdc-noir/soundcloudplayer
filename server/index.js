@@ -3,9 +3,18 @@ var songData = require('../songData');
 var path = require('path');
 var app = express();
 var cors = require('cors');
+var expressStaticGzip = require('express-static-gzip');
 var port = 3005;
 
-app.use(express.static('client'));
+// app.use(express.static('client'));
+app.use('/', expressStaticGzip(express.static('client'), {
+  enableBrotli: true,
+   orderPreference: ['br', 'gz'],
+   setHeaders: function (res, path) {
+      res.setHeader("Cache-Control", "public, max-age=31536000");
+   }
+}))
+
 app.use(cors());
 
 // INCLUDE "try" AND "catch" IN THE ASYNC AWAIT BELOW
