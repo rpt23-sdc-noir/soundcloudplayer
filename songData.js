@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/player');
+mongoose.connect('mongodb://localhost/player', {
+  useNewParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+});
 
 const db = mongoose.connection;
 
@@ -24,6 +29,8 @@ const songDataSchema = new mongoose.Schema({
 
 const Song = mongoose.model('Song', songDataSchema);
 
+// ------- CREATE/SAVE -------- //
+
 var saveSong = async (songData, callback) => {
   try {
     let song = new Song(songData);
@@ -35,6 +42,8 @@ var saveSong = async (songData, callback) => {
   }
 };
 
+// --------- DELETE ----------- //
+
 var deleteSongs = async () => {
   try {
     var deleted = await Song.deleteMany({ });
@@ -44,21 +53,14 @@ var deleteSongs = async () => {
   }
 };
 
+// --------- FIND ----------- //
+
 var findSong = async (id) => {
   try {
     var found = await Song.findOne({ songID: id })
     return found;
   } catch (error) {
     console.error(error);
-  }
-}
-
-var countSongs = async () => {
-  try {
-    var counted = await Song.countDocuments({ });
-    return counted;
-  } catch(error) {
-    return('Error in counting songs in DB');
   }
 }
 
@@ -71,10 +73,36 @@ var findSongsByBand = async (id) => {
   }
 }
 
+// ----------- COUNT ------------- //
+
+var countSongs = async () => {
+  try {
+    var counted = await Song.countDocuments({ });
+    return counted;
+  } catch(error) {
+    return('Error in counting songs in DB');
+  }
+}
+
+// ----------- UPDATE ------------- //
+
+var updateSong = async (id, data) => {
+  try {
+    var updated = await Song.findOneAndUpdate({ songID: id }, data, { new: true });
+    return updated;
+  } catch (error) {
+    return ('Error updating song: ', error);
+  }
+}
+
+// ----------- EXPORTS ------------ //
+
+
 module.exports = {
   saveSong,
   deleteSongs,
   findSong,
   countSongs,
-  findSongsByBand
+  findSongsByBand,
+  updateSong
 }

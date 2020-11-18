@@ -7,17 +7,17 @@ var expressStaticGzip = require('express-static-gzip');
 var port = 3005;
 
 // app.use(express.static('client'));
-app.use('/', expressStaticGzip(express.static('client'), {
+app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
   enableBrotli: true,
-   orderPreference: ['br', 'gz'],
-   setHeaders: function (res, path) {
-      res.setHeader("Cache-Control", "public, max-age=31536000");
-   }
-}))
+  orderPreference: ['br', 'gz'],
+  setHeaders: function (res, path) {
+    res.setHeader("Cache-Control", "client, max-age=31536000");
+  }
+}));
 
 app.use(cors());
 
-// INCLUDE "try" AND "catch" IN THE ASYNC AWAIT BELOW
+// ----------------- CRUD API REQUESTS ------------------ //
 
 app.get('/songdata/:id', async (req, res) => {
   try {
@@ -45,7 +45,15 @@ app.get('/songsByBandID/:id', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-})
+});
+
+app.post('/')
+
+app.put('/')
+
+app.delete('/')
+
+// ------------------------ END ------------------------- //
 
 app.get('/:current', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
