@@ -1,3 +1,4 @@
+var Song = require('./models/songSchema.js');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/player', {
@@ -18,17 +19,6 @@ db.on('open', (ref) => {
   console.log('Connected to Mongo server...');
 });
 
-const songDataSchema = new mongoose.Schema({
-  songName: String,
-  songLength: Number,
-  songID: Number,
-  songURL: String,
-  songImage: String,
-  bandID: Number
-});
-
-const Song = mongoose.model('Song', songDataSchema);
-
 // ------- CREATE/SAVE -------- //
 
 var saveSong = async (songData, callback) => {
@@ -37,7 +27,7 @@ var saveSong = async (songData, callback) => {
     var saved = await song.save(( ) => {
       return('Song saved');
     })
-  } catch(error) {
+  } catch (error) {
     console.error(error);
   }
 };
@@ -46,9 +36,18 @@ var saveSong = async (songData, callback) => {
 
 var deleteSongs = async () => {
   try {
-    var deleted = await Song.deleteMany({ });
+    var deleted = await Song.deleteMany({});
     return (deleted);
-  } catch(error) {
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+var deleteSong = async (id) => {
+  try {
+    var deletedSong = await Song.deleteOne({songID: id});
+    return deletedSong;
+  } catch (error) {
     console.error(error);
   }
 };
@@ -101,6 +100,7 @@ var updateSong = async (id, data) => {
 module.exports = {
   saveSong,
   deleteSongs,
+  deleteSong,
   findSong,
   countSongs,
   findSongsByBand,

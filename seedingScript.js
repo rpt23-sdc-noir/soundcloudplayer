@@ -3,7 +3,7 @@ var key = require('./unsplashAccess.js');
 var axios = require('axios');
 
 
-var seederboi = async () => {
+var seedDB = async () => {
   // almost every Iron Maiden track name to randomly choose from
   var names = ['2 A.m.',
     '2 Minutes To Midnight',
@@ -138,7 +138,6 @@ var seederboi = async () => {
     'Women In Uniform',
     'Wrathchild']
 
-
   var gotPhotos = await axios.get(`https://api.unsplash.com/search/photos/?query=music&client_id=${key.api_key}`)
   .then((res) => {
     return res.data.results
@@ -147,11 +146,9 @@ var seederboi = async () => {
     console.log(err);
   })
 
-
   var photos = gotPhotos.map(photo => {
     return photo.urls.raw
   })
-
 
   var deleted = await songData.deleteSongs();
 
@@ -170,8 +167,8 @@ var seederboi = async () => {
   }
 }
 
-seederboi();
+seedDB();
 
 module.exports = {
-  seederboi
+  seedDB
 };
