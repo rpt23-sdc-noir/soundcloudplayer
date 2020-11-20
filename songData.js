@@ -2,7 +2,6 @@ var Song = require('./models/songSchema.js');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/player', {
-  useNewParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false
@@ -56,7 +55,7 @@ var deleteSong = async (id) => {
 
 var findSong = async (id) => {
   try {
-    var found = await Song.findOne({ songID: id })
+    var found = await Song.findOne({ songID: id });
     return found;
   } catch (error) {
     console.error(error);

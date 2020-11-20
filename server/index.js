@@ -30,51 +30,53 @@ app.get('/songdata/:id', async (req, res) => {
   try {
     var id = req.params.id;
     if (id > 100 || id < 0) {
-      res.end('SONG DOES NOT EXIST');
-    } else {
-      var findSongByID = await songData.findSong(id)
-      res.send(findSongByID);
+      throw new Error(`songID: ${id} does not exist`);
     }
+    var song = await Song.findOne({ songID: id });
+    res.status(200).json({
+      status: "Success",
+      data: song
+    });
   } catch (error) {
     console.log(error)
   }
 });
 
-app.get('/songsByBandID/:id', async (req, res) => {
-  try {
-    var bandID = req.params.id;
-    if (bandID > 30 || bandID < 0) {
-      res.end('BAND ID DOES NOT EXIST');
-    } else {
-      var findSongsByBand = await songData.findSongsByBand(bandID)
-      res.send(findSongsByBand);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
+// app.get('/songsByBandID/:id', async (req, res) => {
+//   try {
+//     var bandID = req.params.id;
+//     if (bandID > 30 || bandID < 0) {
+//       res.end('BAND ID DOES NOT EXIST');
+//     } else {
+//       var findSongsByBand = await songData.findSongsByBand(bandID)
+//       res.send(findSongsByBand);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 app.post('/song', async (req, res) => {
-  // console.log('Request data: ', req.body);
   try {
     var song = await Song.create(req.body);
-    // console.log('Is there a song here?: ', song);
-    // console.log('Request body: ', req.body);
     res.status(201).json({
-      status: 'Created new song!',
+      status: 'Success',
       data: song
     });
   } catch (error) {
     console.log('Error creating new song: ', error);
+    res.status(400).json({
+      status: 'Failed',
+      data: error
+    });
   }
 });
 
 app.put('/song/:id', async (req, res) => {
   try {
     var updatedSong = await songData.updateSong(req.params.id, req.body);
-    // console.log('Update info: ', req.body);
     res.status(200).json({
-      status: 'Updated song with new data!',
+      status: 'Success',
       data: updatedSong
     });
   } catch (error) {
@@ -89,9 +91,9 @@ app.put('/song/:id', async (req, res) => {
 app.delete('/songdata/:id', async (req, res) => {
   try {
     var deletedSong = await songData.deleteSong(req.params.id);
-    res.status(200).json({
+    res.status(202).json({
       status: 'Deleted requested song!',
-      data: deletedSong
+      data: null
     });
   } catch (error) {
     console.log('Error deleting the desired song: ', error);
@@ -111,3 +113,5 @@ app.get('/:current', (req, res) => {
 app.listen(port, () => {
   console.log('Server is listening at http://localhost:' + port)
 });
+
+module.exports = app;
