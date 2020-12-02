@@ -99,6 +99,8 @@ describe('Delete Single Song', () => {
   });
 });
 
+// Test DELETE ALL
+
 describe('deleteSongs function', () => {
   it('Should DELETE all songs in DB', async () => {
     var deleted = await database.deleteSongs();
