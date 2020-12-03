@@ -3,3 +3,6 @@ bundle.js
 unsplashAccess.js
 bundle.js.br
 bundle.js.gz
+.env
+seedFile.csv
+test_seedFile.csv

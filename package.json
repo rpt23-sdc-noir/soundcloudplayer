@@ -15,6 +15,7 @@
     "Pbuild": "webpack --mode=production -d --watch",
     "test": "mocha",
     "jest": "jest",
+    "csv": "node --max-old-space-size=8192 ./csvWriter.js",
     "seed": "knex seed:run"
   },
   "dependencies": {
@@ -24,6 +25,8 @@
     "chai-http": "^4.3.0",
     "compression-webpack-plugin": "^6.0.5",
     "cors": "^2.8.5",
+    "csv-write-stream": "^2.0.0",
+    "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.0",
@@ -37,6 +40,7 @@
     "nodemon": "^2.0.4",
     "path": "^0.12.7",
     "pg": "^8.5.1",
+    "pg-copy-streams": "^5.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-native-sound": "^0.11.0",
