@@ -27,20 +27,26 @@ app.get('/songdata/:id', async (req, res) => {
   try {
     var id = req.params.id;
     if (id > 10000001 || id < 0) {
-      throw new Error(`song_id: ${id} does not exist`);
+      res.status(404).json({
+        status: 'Not Found',
+        data: null
+      });
     }
     var song = await knex('songs').where({ song_id: id });
     res.status(200).json({
-      status: "Success",
+      status: 'Success',
       data: song
     });
   } catch (error) {
-    console.log(error)
+    console.log('Error retrieving song: ', error);
+    res.status(500).json({
+      status: 'Failed',
+      data: null
+    })
   }
 });
 
 app.post('/song', async (req, res) => {
-  // console.log('Request: ', req.body);
   try {
     var song = await knex('songs').insert(req.body);
     res.status(201).json({
@@ -74,8 +80,14 @@ app.put('/song/:id', async (req, res) => {
 
 app.delete('/songdata/:id', async (req, res) => {
   try {
+    if (id > 10000001 || id < 0) {
+      res.status(404).json({
+        status: 'Failed for invalid song_id',
+        data: null
+      });
+    }
     var deletedSong = await knex('songs').where({ song_id: req.params.id}).del();
-    res.status(202).json({
+    res.status(200).json({
       status: 'Deleted requested song!',
       data: null
     });

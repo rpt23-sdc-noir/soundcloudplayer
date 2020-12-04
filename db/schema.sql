@@ -1,10 +1,10 @@
 DROP DATABASE IF EXISTS songs;
 CREATE DATABASE songs;
 
--- -- connect to database
--- \c songs;
+-- connect to database
+\c songs;
 
-CREATE TABLE IF NOT EXISTS songs (
+CREATE TABLE song_list (
   song_id SERIAL PRIMARY KEY,
   song_name TEXT NOT NULL,
   song_length INTEGER NOT NULL,
