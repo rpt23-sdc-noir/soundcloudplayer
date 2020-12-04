@@ -1,45 +1,31 @@
-const mongoose = require('mongoose');
-const database = require('../songData');
-const seeding = require('../seedingScript');
-const Song = require('../models/songSchema.js');
+const database = require('../db/pg_db.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../server/index.js');
-
+const app = require('../server/pgServer.js');
 const should = chai.should();
 const expect = chai.expect;
 chai.use(chaiHttp);
 
-// TEST DATABASE
-
-describe('findSong function', () => {
-  it('Should GET song data for song with id of 1', async () => {
-    var songData = await database.findSong(1);
-    songData.should.be.a('object');
-  });
-});
-
 // Test .post (CREATE)
 
-describe('Should save (CREATE) a song', () => {
+describe('Should Save (CREATE) a Song', () => {
   it('Should save a new song to the database', (done) => {
     chai.request(app)
       .post('/song')
       .set('Content-Type', 'application/json')
       .send({
-        "songID": 101,
-        "songLength": 203,
-        "songName": "New Song Test",
-        "songURL": "I am a URL",
-        "songImage": "I am a song image"
+        "song_id": 10000001,
+        "song_name": "Test Song",
+        "song_length": 203,
+        "song_url": "I am a URL",
+        "song_image": "I am a song image"
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
-        expect(res.body.status).to.equals("Success");
         expect(res.body.data).to.be.an("object");
-        expect(res.body.data.songID).to.be.eql(101);
-        expect(res.body.data.songName).to.be.a("string");
-        expect(res.body.data.songID).to.be.a("number");
+        expect(res.body.data.song_id).to.be.eql(10000001);
+        expect(res.body.data.song_name).to.be.a("string");
+        expect(res.body.data.song_id).to.be.a("number");
         done();
       });
   });
@@ -47,17 +33,16 @@ describe('Should save (CREATE) a song', () => {
 
 // Test .get (READ)
 
-describe('Should find (READ) a song', () => {
+describe('Should Find (READ) a Song', () => {
   it('Should return a song with a songID of 1', (done) => {
     chai.request(app)
       .get('/songdata/1')
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.body.status).to.equals("Success");
-        expect(res.body.data).to.be.an("object");
-        expect(res.body.data.songID).to.be.eql(1);
-        expect(res.body.data.songName).to.be.a("string");
-        expect(res.body.data.songID).to.be.a("number");
+        expect(res.body.data[0].song_id).to.be.eql(1);
+        expect(res.body.data[0]).to.be.an("object");
+        expect(res.body.data[0].song_name).to.be.a("string");
+        expect(res.body.data[0].song_id).to.be.a("number");
         done();
       });
   });
@@ -65,22 +50,19 @@ describe('Should find (READ) a song', () => {
 
 // Test .put (UPDATE)
 
-describe('Should update (UPDATE) a song', () => {
-  it('Should replace the songName property with a new song name', (done) => {
+describe('Should Update (UPDATE) a Song', () => {
+  it('Should replace the song_name property with a new song name', (done) => {
     chai.request(app)
-      .put('/song/1')
+      .put('/song/47')
       .set('Content-Type', 'application/json')
       .send({
-        "songName": 'New Song Name Test'
+        "song_name": 'New Song Name Test'
       })
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.body.status).to.equals("Success");
         expect(res.body.data).to.be.an("object");
-        expect(res.body.data.songID).to.be.eql(1);
-        expect(res.body.data.songName).to.be.a("string");
-        expect(res.body.data.songName).to.be.eql("New Song Name Test");
-        expect(res.body.data.songID).to.be.a("number");
+        expect(res.body.data.song_name).to.be.a("string");
+        expect(res.body.data.song_name).to.be.eql("New Song Name Test");
         done();
       });
   });
@@ -89,9 +71,9 @@ describe('Should update (UPDATE) a song', () => {
 // Test .delete (DELETE)
 
 describe('Delete Single Song', () => {
-  it('Should DELETE one song in DB at input songID', async () => {
+  it('Should DELETE one song in DB at input song_id', async () => {
     chai.request(app)
-      .delete('/songdata/1')
+      .delete('/songdata/10000001')
       .end((err, res) => {
         expect(res.body.status).to.be.eql('Deleted requested song!')
         expect(res.body.data).to.be.eql(null);
@@ -99,12 +81,15 @@ describe('Delete Single Song', () => {
   });
 });
 
-// Test DELETE ALL
+// Invalid song_id GET request (READ)
 
-describe('deleteSongs function', () => {
-  it('Should DELETE all songs in DB', async () => {
-    var deleted = await database.deleteSongs();
-    var count = await database.countSongs();
-    count.should.be.eql(0);
-  });
-});
+describe('Invalid "song_id" Request', () => {
+  it('Should return an error for an invalid song_id request', async() => {
+    chai.request(app)
+      .get('/songdata/10000002')
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body.status).to.be.eql('Not Found');
+      });
+  })
+})
