@@ -1,6 +1,4 @@
 const knex = require('../../knexConnection.js');
-const axios = require('axios');
-const key = require('../../unsplashAccess.js');
 
 exports.seed = async (knex) => {
   try {
