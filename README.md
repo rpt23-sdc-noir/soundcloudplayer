@@ -29,7 +29,9 @@ DELETE /songdata/:id deletes a single song in the database using the input "song
 
 ## Usage
 
-> You will need to add a file in the root directory called unsplashAccess.js, which will house the Unsplash API key needed for seeding.
+> You will need to add a file in the root directory called unsplashAccess.js, which will house the Unsplash API key (obtained from Unsplash) needed for seeding.
+
+> A .env file containing the PostGreSQL auth data must be created. For CouchDB, a "cbconfig.js" file containing the username and password for access must also be created.
 
 
 ## Requirements
@@ -38,8 +40,20 @@ DELETE /songdata/:id deletes a single song in the database using the input "song
   - React-DOM
   - Express
   - Axios
+  - PostGreSQL
+  - Knex
+  - Unsplash API Key (for images)
 
 ## Development
+
+## Song Data
+{
+  song_id: Number,
+  song_name: String,
+  song_length: Number,
+  song_url: String,
+  song_image: String
+}
 
 ### Installing Dependencies
 
