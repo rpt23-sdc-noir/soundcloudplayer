@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const expressStaticGzip = require('express-static-gzip');
 const knex = require('../knexConnection.js');
+const chalk = require('chalk');
 const bodyParser = require('body-parser');
 const port = 3005;
 
@@ -34,7 +35,7 @@ app.post('/song', async (req, res) => {
       data: req.body
     });
   } catch (error) {
-    console.log('Error creating new song: ', error);
+    console.log(chalk.red('Error creating new song: ', error));
     res.status(400).json({
       status: 'Failed',
       data: error
@@ -60,7 +61,7 @@ app.get('/songdata/:id', async (req, res) => {
       });
     }
   } catch (error) {
-    console.log('Error retrieving song: ', error);
+    console.log(chalk.red('Error retrieving song: ', error));
     res.status(500).json({
       status: 'Failed',
       data: null
@@ -78,7 +79,7 @@ app.put('/song/:id', async (req, res) => {
       data: req.body
     });
   } catch (error) {
-    console.log('Error updating song: ', error);
+    console.log(chalk.red('Error updating song: ', error));
     res.status(400).json({
       status: 'Failed',
       data: error
@@ -104,7 +105,7 @@ app.delete('/songdata/:id', async (req, res) => {
       });
     }
   } catch (error) {
-    console.log('Error deleting the desired song: ', error);
+    console.log(chalk.red('Error deleting the desired song: ', error));
     res.status(400).json({
       status: 'Failed',
       data: error
@@ -119,7 +120,7 @@ app.get('/:current', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log('Server is listening at http://localhost:' + port)
+  console.log(chalk.magenta('Server is listening at http://localhost:' + port));
 });
 
 module.exports = app;

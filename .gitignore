@@ -1,8 +1,16 @@
+# Node Modules
 node_modules
+
+# Bundles
 bundle.js
-unsplashAccess.js
 bundle.js.br
 bundle.js.gz
+
+# Auth Data/API Keys
+unsplashAccess.js
+cbconfig.js
 .env
+
+# Seed Data
 seedFile.csv
 test_seedFile.csv
