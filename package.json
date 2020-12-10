@@ -8,13 +8,10 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "seedMongo": "node ./seedingScript.js",
     "start": "nodemon ./server/index.js",
-    "pgStart": "nodemon ./server/pgServer.js",
     "build": "webpack --mode=development -d --watch",
     "Pbuild": "webpack --mode=production -d --watch",
     "test": "mocha",
-    "jest": "jest",
     "csv": "node --max-old-space-size=8192 ./csvWriter.js",
     "seed": "knex seed:run"
   },

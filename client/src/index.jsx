@@ -18,7 +18,7 @@ class Player extends React.Component {
       currentUpload: '1 month ago'
     }
     // this.url = "https://rpt23-fec-soundcloud.s3-us-west-2.amazonaws.com/Djenty+Metal+Town%2C+USA.mp3";
-    this.songId = window.location.pathname.substring(1);
+    this.song_id = window.location.pathname.substring(1);
   }
 
   // frame() {
@@ -33,47 +33,49 @@ class Player extends React.Component {
 
   // }
 
-  initialize() {
-    $.ajax({
-      type: "GET",
-      url: `http://52.37.102.63:3005/songdata/${this.songId}`,
-      success: (res) => {
-        this.setState({
-          currentSong: this.audio = new Howl({
-            src: [res.songURL],
-            // onplay: () => { requestAnimationFrame(this.frame) }
-          }),
-          currentPicture: res.songImage,
-          currentSongName: res.songName
-        })
-      }
-    })
-    $.ajax({
-      type: "GET",
-      url: `http://18.189.26.97:4001/hashtags/${this.songId}`,
-      success: (res) => {
-        var hashtags = res.data;
-        this.state.currentHashtags = hashtags;
-        // this.setState({
-        //   currentHashtags: res.data
-        // })
-      }
-    })
-    $.ajax({
-      type: "GET",
-      url: `http://34.220.154.45:2000/artistBio/${this.songId}`,
-      success: (res) => {
-        this.setState({
-          currentBandID: res.data.bandId,
-          currentBandName: res.data.bandName
-        })
-      }
-    })
-  }
 
   componentDidMount() {
-    this.initialize();
-    console.log(this.state);
+    $.ajax({
+      type: "GET",
+      url: `http://localhost:3005/songdata/${this.song_id}`,
+      success: (res) => {
+        console.log('Response: ', res);
+        this.setState({
+          currentSong: this.audio = new Howl({
+            src: [res.data[0].song_url],
+            // onplay: () => { requestAnimationFrame(this.frame) }
+          }),
+          currentPicture: res.data[0].song_image,
+          currentSongName: res.data[0].song_name
+        }, () => {
+          console.log('Updated state: ', this.state);
+        })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    // $.ajax({
+    //   type: "GET",
+    //   url: `http://localhost:4001/hashtags/${this.songId}`,
+    //   success: (res) => {
+    //     var hashtags = res.data;
+    //     this.state.currentHashtags = hashtags;
+    //     // this.setState({
+    //     //   currentHashtags: res.data
+    //     // })
+    //   }
+    // })
+    // $.ajax({
+    //   type: "GET",
+    //   url: `http://localhost:2000/artistBio/${this.songId}`,
+    //   success: (res) => {
+    //     this.setState({
+    //       currentBandID: res.data.bandId,
+    //       currentBandName: res.data.bandName
+    //     })
+    //   }
+    // })
   }
 
   // componentWillUnmount() {
