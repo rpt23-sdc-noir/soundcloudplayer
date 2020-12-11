@@ -48,10 +48,10 @@ app.post('/song', async (req, res) => {
 
 app.get('/songdata/:id', async (req, res) => {
   try {
-    var id = req.params.id;
-    if (id > 10000000 || id < 0) {
+    const { id } = req.params;
+    if (id > 10000000 || typeof Number(id) !== 'number') {
       res.status(404).json({
-        status: 'Not Found',
+        status: 'Failed for invalid song_id',
         data: null
       });
     } else {
@@ -94,9 +94,9 @@ app.put('/song/:id', async (req, res) => {
 // DELETE
 
 app.delete('/songdata/:id', async (req, res) => {
-  var id = req.params.id;
+  var { id } = req.params;
   try {
-    if (id < 0) {
+    if (typeof Number(id) !== 'number') {
       res.status(404).json({
         status: 'Failed for invalid song_id',
         data: null
