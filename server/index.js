@@ -1,14 +1,13 @@
-var express = require('express');
-var songData = require('../songData');
-var path = require('path');
-var app = express();
-var cors = require('cors');
-var expressStaticGzip = require('express-static-gzip');
-var port = 3005;
-var Song = require('../models/songSchema.js');
-var bodyParser = require('body-parser');
-
-// ----------------------------------------------------- //
+require('newrelic');
+const express = require('express');
+const app = express();
+const path = require('path');
+const cors = require('cors');
+const expressStaticGzip = require('express-static-gzip');
+const knex = require('../knexConnection.js');
+const chalk = require('chalk');
+const bodyParser = require('body-parser');
+const port = 3005;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -24,63 +23,67 @@ app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
 
 app.use(cors());
 
-// ----------------- CRUD API REQUESTS ------------------ //
+// ---------------- CRUD FOR POSTGRESQL --------------- //
 
-app.get('/songdata/:id', async (req, res) => {
-  try {
-    var id = req.params.id;
-    if (id > 100 || id < 0) {
-      throw new Error(`songID: ${id} does not exist`);
-    }
-    var song = await Song.findOne({ songID: id });
-    res.status(200).json({
-      status: "Success",
-      data: song
-    });
-  } catch (error) {
-    console.log(error)
-  }
-});
-
-// app.get('/songsByBandID/:id', async (req, res) => {
-//   try {
-//     var bandID = req.params.id;
-//     if (bandID > 30 || bandID < 0) {
-//       res.end('BAND ID DOES NOT EXIST');
-//     } else {
-//       var findSongsByBand = await songData.findSongsByBand(bandID)
-//       res.send(findSongsByBand);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+// CREATE
 
 app.post('/song', async (req, res) => {
   try {
-    var song = await Song.create(req.body);
+    var song = await knex('song_list').insert(req.body);
+    // console.log('CREATE SONG request data: ', req.body);
     res.status(201).json({
       status: 'Success',
-      data: song
+      data: req.body
     });
   } catch (error) {
-    console.log('Error creating new song: ', error);
+    console.log(chalk.red('Error creating new song: ', error));
     res.status(400).json({
       status: 'Failed',
       data: error
     });
   }
 });
+
+// READ
+
+app.get('/songdata/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (id > 10000000 || typeof Number(id) !== 'number') {
+      res.status(404).json({
+        status: 'Failed for invalid song_id',
+        data: null
+      });
+    } else {
+      var song = await knex('song_list').where({ song_id: id });
+      // console.log({
+      //   song
+      // });
+      res.status(200).json({
+        status: 'Success',
+        data: song
+      });
+    }
+  } catch (error) {
+    console.log(chalk.red('Error retrieving song: ', error));
+    res.status(500).json({
+      status: 'Failed',
+      data: null
+    })
+  }
+});
+
+// UPDATE
 
 app.put('/song/:id', async (req, res) => {
   try {
-    var updatedSong = await songData.updateSong(req.params.id, req.body);
+    var updatedSong = await knex('song_list').where({song_id: req.params.id}).update(req.body);
     res.status(200).json({
       status: 'Success',
-      data: updatedSong
+      data: req.body
     });
   } catch (error) {
-    console.log('Error updating song: ', error);
+    console.log(chalk.red('Error updating song: ', error));
     res.status(400).json({
       status: 'Failed',
       data: error
@@ -88,15 +91,25 @@ app.put('/song/:id', async (req, res) => {
   }
 });
 
+// DELETE
+
 app.delete('/songdata/:id', async (req, res) => {
+  var { id } = req.params;
   try {
-    var deletedSong = await songData.deleteSong(req.params.id);
-    res.status(202).json({
-      status: 'Deleted requested song!',
-      data: null
-    });
+    if (typeof Number(id) !== 'number') {
+      res.status(404).json({
+        status: 'Failed for invalid song_id',
+        data: null
+      });
+    } else {
+      var deletedSong = await knex('song_list').where({ song_id: req.params.id}).del();
+      res.status(200).json({
+        status: 'Deleted requested song!',
+        data: null
+      });
+    }
   } catch (error) {
-    console.log('Error deleting the desired song: ', error);
+    console.log(chalk.red('Error deleting the desired song: ', error));
     res.status(400).json({
       status: 'Failed',
       data: error
@@ -111,7 +124,7 @@ app.get('/:current', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log('Server is listening at http://localhost:' + port)
+  console.log(chalk.magenta('Server is listening at http://localhost:' + port));
 });
 
 module.exports = app;

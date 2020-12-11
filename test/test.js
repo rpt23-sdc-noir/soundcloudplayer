@@ -1,7 +1,7 @@
 const database = require('../db/pg_db.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../server/pgServer.js');
+const app = require('../server/index.js');
 const should = chai.should();
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -34,7 +34,7 @@ describe('Should Save (CREATE) a Song', () => {
 // Test .get (READ)
 
 describe('Should Find (READ) a Song', () => {
-  it('Should return a song with a songID of 1', (done) => {
+  it('Should return a song with a song_id of 1', (done) => {
     chai.request(app)
       .get('/songdata/1')
       .end((err, res) => {
@@ -89,7 +89,7 @@ describe('Invalid "song_id" Request', () => {
       .get('/songdata/10000002')
       .end((err, res) => {
         expect(res).to.have.status(404);
-        expect(res.body.status).to.be.eql('Not Found');
+        expect(res.body.status).to.be.eql('Failed for invalid song_id');
       });
   })
 })

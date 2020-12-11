@@ -2,7 +2,7 @@
 node_modules
 
 # Bundles
-bundle.js
+client/bundle.js
 bundle.js.br
 bundle.js.gz
 
@@ -14,3 +14,7 @@ cbconfig.js
 # Seed Data
 seedFile.csv
 test_seedFile.csv
+
+# New Relic
+newrelic.js
+newrelic_agent.log
