@@ -12,7 +12,7 @@
     "build": "webpack --mode=development -d --watch",
     "Pbuild": "webpack --mode=production -d --watch",
     "test": "mocha",
-    "csv": "node --max-old-space-size=8192 ./csvWriter.js",
+    "csv": "node ./csvWriter.js",
     "seed": "knex seed:run"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-native-sound": "^0.11.0",
+    "redis": "^3.0.2",
     "s3": "^4.4.0",
     "sqlite3": "^5.0.0",
     "unsplash-js": "^6.3.0"
