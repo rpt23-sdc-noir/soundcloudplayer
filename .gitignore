@@ -18,3 +18,5 @@ test_seedFile.csv
 # New Relic
 newrelic.js
 newrelic_agent.log
+
+nohup.output
