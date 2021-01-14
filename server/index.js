@@ -9,6 +9,12 @@ const chalk = require('chalk');
 const bodyParser = require('body-parser');
 const port = 3005;
 
+// REDIS
+const redis = require('redis');
+const client = redis.createClient();
+
+// Middleware/Compression
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -22,6 +28,30 @@ app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
 }));
 
 app.use(cors());
+
+// CHECK CACHE
+
+checkCache = (req, res, next) => {
+  const { id } = req.params;
+// get value to pair with song_id key
+  client.get(id, (err, data) => {
+    console.log('ID: ', id);
+    console.log('Data: ', data);
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    if (data !== null) {
+      res.status(200).send({
+        success: true,
+        data: data
+      });
+    } else {
+      // proceed to next middleware function
+      next();
+    }
+  });
+};
 
 // ---------------- CRUD FOR POSTGRESQL --------------- //
 
@@ -45,8 +75,8 @@ app.post('/song', async (req, res) => {
 });
 
 // READ
-
-app.get('/songdata/:id', async (req, res) => {
+app.get('/songdata/:id', checkCache, async (req, res) => {
+// app.get('/songdata/:id', async (req, res) => {
   try {
     const { id } = req.params;
     if (id > 10000000 || typeof Number(id) !== 'number') {
@@ -56,9 +86,7 @@ app.get('/songdata/:id', async (req, res) => {
       });
     } else {
       var song = await knex('song_list').where({ song_id: id });
-      // console.log({
-      //   song
-      // });
+      client.setex(id, 3600, JSON.stringify(song)); // REDIS -> Key/Value pair set to expire in 1 hour (3600s)
       res.status(200).json({
         status: 'Success',
         data: song

@@ -15,20 +15,23 @@ import { check, sleep } from 'k6';
 
 // Ramp Test - GET (READ) Request
 
-// export let options = {
-//   stages: [
-//     { duration: '120s', target: 2000 }
-//   ],
-//   startVUs: 2000
-// };
-// export default function () {
-//   let max = 10000000;
-//   let min = 9000000;
-//   let randomId = Math.random() * (max - min) + min;
-//   let res = http.get(`http://localhost:3005/${randomId}`);
-//   check(res, { 'status was 200': (r) => r.status == 200 });
-//   sleep(1);
-// }
+export let options = {
+  rps: 1000,
+  VUs: 1000,
+  duration: '4m'
+  // stages: [
+  //   { duration: '120s', target: 1000 }
+  // ]n
+};
+export default function () {
+  let max = 10000000;
+  let min = 9999900;
+  // let randomId = 9999998;
+  let randomId = Math.random() * (max - min) + min;
+  let res = http.get(`http://localhost:3005/${randomId}`);
+  check(res, { 'status was 200': (r) => r.status == 200 });
+  sleep(1);
+}
 
 /*
 
@@ -66,26 +69,26 @@ import { check, sleep } from 'k6';
 // ------------------ PUT (UPDATE) Request
 
 
-export let options = {
-  stages: [
-    { duration: '60s', target: 1000 }
-  ],
-  startVUs: 550
-};
+// export let options = {
+//   stages: [
+//     { duration: '60s', target: 1000 }
+//   ],
+//   startVUs: 550
+// };
 
-export default function () {
-  const max = 10000000;
-  const min = 9000000;
-  let randomId = Math.random() * (max - min) + min;
-  const url = `http://localhost:3005/${randomId}`;
-  const headers = { 'Content-Type': 'application/json' };
-  const data = { "song_name": 'New Song Name' };
+// export default function () {
+//   const max = 10000000;
+//   const min = 9000000;
+//   let randomId = Math.random() * (max - min) + min;
+//   const url = `http://localhost:3005/${randomId}`;
+//   const headers = { 'Content-Type': 'application/json' };
+//   const data = { "song_name": 'New Song Name' };
 
-  let res = http.put(url, data, { headers: headers });
+//   let res = http.put(url, data, { headers: headers });
 
-  // console.log(JSON.parse(res.body).json.name);
+//   // console.log(JSON.parse(res.body).json.name);
 
-}
+// }
 
 // --------------------- DELETE Request
 
